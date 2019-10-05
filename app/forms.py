@@ -28,6 +28,15 @@ class SignInForm(FlaskForm):
         if user:
             raise ValidationError('Email already registered.')
 
+class ResetPasswordForm(FlaskForm):
+    email = StringField('Your email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Restore')
+
+class UpdatePasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Update')
+
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])

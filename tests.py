@@ -7,7 +7,7 @@ from app.models import User, Post
 
 class UserModelCase(unittest.TestCase):
     def setUp(self) -> None:
-        app.config['SQLALQUEMY_DATABASE_URI'] = 'sqlite://'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
         db.create_all()
 
     def tearDown(self) -> None:

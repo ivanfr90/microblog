@@ -42,3 +42,8 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('Username already exists')
+
+
+class PostForm(FlaskForm):
+    post = TextAreaField('Tell something to world', validators=[DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Publish')

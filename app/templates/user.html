@@ -24,8 +24,18 @@
     {% for post in posts %}
     <table>
         <tr valign="top">
+            {% if user == current_user %}
+            {% include 'owner_post.html' %}
+            {% else %}
             {% include 'post.html' %}
+            {% endif %}
         </tr>
     </table>
     {% endfor %}
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Newer posts</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Older posts</a>
+    {% endif %}
 {% endblock %}

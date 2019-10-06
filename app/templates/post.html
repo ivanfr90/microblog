@@ -17,7 +17,9 @@
     </div>
 </div>
 <script>
-    window.addEventListener("load", function(event) {
-    	postTime('{{post.timestamp}}', '{{ index }}');
-    }, false);
+	window.addEventListener("load", function (event) {
+		var postTimeAgo = moment('{{post.timestamp}}', 'YYYY-MM-DD HH:mm:ss.SSSSSS').fromNow();
+		var userEntryHTML = document.getElementById('user-entry-' + '{{ index }}');
+		userEntryHTML.innerHTML = userEntryHTML.innerHTML + " " + postTimeAgo;
+	}, false);
 </script>

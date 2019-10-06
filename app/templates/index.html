@@ -3,13 +3,6 @@
 {% block custom_scripts %}
 {{ super() }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
-<script>
-    function postTime(postTimestamp, index) {
-		var postTimeAgo = moment(postTimestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS').fromNow();
-		var userEntryHTML = document.getElementById('user-entry-' + index);
-		userEntryHTML.innerHTML = userEntryHTML.innerHTML + " " + postTimeAgo;
-	};
-</script>
 {% endblock %}
 
 {% block content %}

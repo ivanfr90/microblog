@@ -1,28 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Log In</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    <p>
-        <a href="{{ url_for('reset_password') }}">I forgot my password</a>
-        <a href="{{ url_for('signin') }}">Sign Up</a>
-    </p>
+<div class="row">
+    <div class="col-12 col-md-6 mx-auto">
+        <div class="text-center py-3 pb-5">
+            <h1>Log In</h1>
+        </div>
+
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(class="form-control") }}
+                {% for error in form.username.errors %}
+                <div class="alert alert-danger p-0 mt-1" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control") }}
+                {% for error in form.password.errors %}
+                <div class="alert alert-danger p-0 mt-1" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                </p>
+                <div class="text-right">
+                    <div class="custom-control custom-checkbox">
+                        {{ form.remember_me(class="custom-control-input") }}
+                        <label class="custom-control-label" for="remember_me">{{ form.remember_me.label }}</label>
+                    </div>
+                </div>
+                <div class="text-center pt-4">
+                    {{ form.submit(class="btn btn-primary px-5") }}
+                </div>
+            </div>
+        </form>
+
+        <div class="text-center">
+            <a href="{{ url_for('reset_password') }}">I forgot my password</a>
+            <a href="{{ url_for('signin') }}">Sign Up</a>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

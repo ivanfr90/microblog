@@ -1,41 +1,77 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <table>
-        <tr valign="top">
-            <td>
-                <img src="{{ user.avatar(128) }}">
-            </td>
-            <td>
-                <h1>User: {{ user.username }}</h1>
-                {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-                {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
-                {% if user == current_user %}
-                <p><a href="{{ url_for('edit_profile') }}">Edit profile</a></p>
-                {% elif not current_user.is_following(user) %}
-                <p><a href="{{ url_for('follow', username=user.username) }}">Follow</a></p>
-                {% else %}
-                <p><a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a></p>
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+<div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+        <div class="row">
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="row h-100">
+                    <div class="col-auto my-auto">
+                        <img src="{{ user.avatar(128) }}" class="img-fluid" alt="Profile image">
+                    </div>
+                    <div class="col my-auto">
+                        <h1>{{ user.username }}</h1>
+                        {% if user.about_me %}
+                        <p>{{ user.about_me }}</p>
+                        {% endif %}
+
+                        {% if user.last_seen %}
+                        <div>
+                            <small>Last seen on: {{ user.last_seen }}</small>
+                        </div>
+                        {% endif %}
+
+                        <div class="py-2">
+                            {% if user == current_user %}
+                            <a href="{{ url_for('edit_profile') }}" class="btn btn-sm btn-primary">Edit profile</a>
+                            {% elif not current_user.is_following(user) %}
+                            <a href="{{ url_for('follow', username=user.username) }}"
+                               class="btn btn-sm btn-success">Follow</a>
+                            {% else %}
+                            <a href="{{ url_for('unfollow', username=user.username) }}"
+                               class="btn btn-sm btn-danger">Unfollow</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div><!---->
+            </div>
+        </div>
+    </div>
+
+
     <hr>
-    {% for post in posts %}
-    <table>
-        <tr valign="top">
-            {% if user == current_user %}
-            {% include 'owner_post.html' %}
-            {% else %}
-            {% include 'post.html' %}
-            {% endif %}
-        </tr>
-    </table>
-    {% endfor %}
-    {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
-    {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
-    {% endif %}
+
+    <div class="col-12 col-md-10 mx-auto my-4">
+        <div class="row">
+            <div class="col">
+                {% for post in posts %}
+
+                {% if user == current_user %}
+                {% include 'owner_post.html' %}
+                {% else %}
+                {% include 'post.html' %}
+                {% endif %}
+
+                {% endfor %}
+
+                {% if prev_url or next_url %}
+                <nav aria-label="Pagination">
+                    <ul class="pagination justify-content-end">
+                        {% if prev_url %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ prev_url }}">Newer posts</a>
+                        </li>
+                        {% endif %}
+                        {% if next_url %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ next_url }}">Older posts</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

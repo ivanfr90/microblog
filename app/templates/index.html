@@ -1,29 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    {% if form %}
-    <form action="" method="POST">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
-            {% for error in form.post.errors %}}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    {% endif %}
-    {% for post in posts %}
-    <div>
-        {% include 'post.html' %}
+<div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+        <div class="text-left py-3 pb-3">
+            <h1>Hi, {{ current_user.username }}!</h1>
+        </div>
+
+        {% if form %}
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.post.label }}
+                {{ form.post(class="form-control") }}
+                {% for error in form.post.errors %}
+                <div class="alert alert-danger p-0 mt-1" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-left">
+                {{ form.submit(class="btn btn-sm btn-primary px-5") }}
+            </div>
+        </form>
+        {% endif %}
+        {% for post in posts %}
+        <div>
+            {% include 'post.html' %}
+        </div>
+        {% endfor %}
+
+
+        {% if prev_url or next_url %}
+        <nav aria-label="Pagination">
+            <ul class="pagination justify-content-end">
+                {% if prev_url %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ prev_url }}">Newer posts</a>
+                </li>
+                {% endif %}
+                {% if next_url %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ next_url }}">Older posts</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
     </div>
-    {% endfor %}
-    {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
-    {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
-    {% endif %}
+</div>
 {% endblock %}

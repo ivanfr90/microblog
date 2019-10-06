@@ -1,23 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Edit Profile</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[ {{error}} ]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.about_me.label }}<br>
-            {{ form.about_me(cols=50, rows=4) }}<br>
-            {% for error in form.about_me.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+<div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+        <div class="text-left py-3 pb-3">
+            <h1>Edit Profile</h1>
+        </div>
+
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(class="form-control") }}
+                {% for error in form.username.errors %}
+                <div class="alert alert-danger p-0 mt-1" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.about_me.label }}
+                {{ form.about_me(class="form-control") }}
+                {% for error in form.about_me.errors %}
+                <div class="alert alert-danger p-0 mt-1" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center pt-4">
+                    {{ form.submit(class="btn btn-primary px-5") }}
+                </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

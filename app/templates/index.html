@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
+{% block custom_scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+<script>
+    function postTime(postTimestamp, index) {
+		var postTimeAgo = moment(postTimestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS').fromNow();
+		var userEntryHTML = document.getElementById('user-entry-' + index);
+		userEntryHTML.innerHTML = userEntryHTML.innerHTML + " " + postTimeAgo;
+	};
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-12 col-md-10 mx-auto">
@@ -24,12 +36,12 @@
             </div>
         </form>
         {% endif %}
-        {% for post in posts %}
-        <div>
-            {% include 'post.html' %}
-        </div>
-        {% endfor %}
 
+        {% for post in posts %}
+            {% with index=loop.index %}
+                {% include 'post.html' %}
+            {% endwith %}
+        {% endfor %}
 
         {% if prev_url or next_url %}
         <nav aria-label="Pagination">

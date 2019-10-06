@@ -5,9 +5,19 @@
                 <img src="{{ post.author.avatar(36) }}" class="img-fluid" alt="Avatar image">
             </div>
             <div class="col my-auto">
-                <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
-                says: <br>{{ post.body }}
+                <dvi>
+                    <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
+                    <span>said: {{ post.body }}</span>
+                </dvi>
+                <div>
+                    <small id="user-entry-{{ index }}"></small>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener("load", function(event) {
+    	postTime('{{post.timestamp}}', '{{ index }}');
+    }, false);
+</script>

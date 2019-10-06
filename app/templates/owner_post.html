@@ -2,8 +2,16 @@
     <div class="card-body py-2">
         <div class="row h-100">
             <div class="col my-auto">
-                I say: <br>{{ post.body }}
+                <p>{{ post.body }}</p>
+                <div>
+                    <small id="user-entry-{{ index }}"></small>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+	window.addEventListener("load", function (event) {
+		postTime('{{post.timestamp}}', '{{ index }}');
+	}, false);
+</script>

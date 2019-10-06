@@ -3,6 +3,11 @@
 {% block custom_scripts %}
 {{ super() }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+<script>
+    var lastConnection = moment('{{ user.last_seen }}', 'YYYY-MM-DD HH:mm:ss.SSSSSS').format('LLL');
+    var lastConnectionHTML = document.getElementById('last-connection');
+    lastConnectionHTML.innerHTML =  lastConnectionHTML.innerHTML + " " + lastConnection;
+</script>
 {% endblock %}
 
 {% block content %}
@@ -22,7 +27,7 @@
 
                         {% if user.last_seen %}
                         <div>
-                            <small id="last-seen">Last connection:</small>
+                            <small id="last-connection">Last connection:</small>
                         </div>
                         {% endif %}
 

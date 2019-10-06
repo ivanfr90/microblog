@@ -12,6 +12,7 @@
 </div>
 <script>
 	window.addEventListener("load", function (event) {
+		moment().locale('{{ g.locale }}');
 		var postTimeAgo = moment('{{post.timestamp}}', 'YYYY-MM-DD HH:mm:ss.SSSSSS').fromNow();
 		var userEntryHTML = document.getElementById('user-entry-' + '{{ index }}');
 		userEntryHTML.innerHTML = userEntryHTML.innerHTML + " " + postTimeAgo;

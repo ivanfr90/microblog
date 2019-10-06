@@ -2,11 +2,11 @@
 <div class="row">
     <div class="col-12 col-md-6 mx-auto">
         <div class="text-center py-3 pb-5">
-            <h1>Error 500 | An unexpected error has occurred</h1>
-            <p>The administrator has been notified. Sorry for the inconvenience!</p>
+            <h1>{{ _('Error 500 | An unexpected error has occurred') }}</h1>
+            <p>{{ _('The administrator has been notified. Sorry for the inconvenience!') }}</p>
         </div>
         <div class="text-center">
-            <a href="{{ url_for('index') }}">Return to Home</a>
+            <a href="{{ url_for('index') }}">{{ _('Return to Home') }}</a>
         </div>
     </div>
 </div>

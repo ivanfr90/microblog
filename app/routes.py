@@ -1,14 +1,16 @@
 from datetime import datetime
 
-from flask import render_template, redirect, flash, url_for, request, g
+from flask import render_template, redirect, flash, url_for, request, g, jsonify
 from flask_babel import _, get_locale
 from flask_login import current_user, login_user, logout_user, login_required
+from guess_language import guess_language, UNKNOWN
 from werkzeug.urls import url_parse
 
 from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, SignInForm, EditProfileForm, PostForm, ResetPasswordForm, UpdatePasswordForm
 from app.models import User, Post
+from app.translate import translate
 
 
 @app.before_request
@@ -21,13 +23,17 @@ def update_last_seen():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
+        language = guess_language(form.post.data)
+        if language == UNKNOWN or len(language) > 5:
+            language = ''
+        post = Post(body=form.post.data, author=current_user, language=language)
         db.session.add(post)
         db.session.commit()
         flash(_('Your post has been published'))
@@ -36,7 +42,8 @@ def index():
     posts = current_user.followed_posts().paginate(page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('index', page=posts.next_num) if posts.has_next else None
     prev_url = url_for('index', page=posts.prev_num) if posts.has_prev else None
-    return render_template('index.html', title=_('Home'), form=form, posts=posts.items, next_url=next_url, prev_url=prev_url)
+    return render_template('index.html', title=_('Home'), form=form, posts=posts.items, next_url=next_url,
+                           prev_url=prev_url)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -59,10 +66,12 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html', title=_('Log In'), form=form)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
@@ -78,6 +87,7 @@ def signin():
         return redirect(url_for('login'))
     return render_template('signin.html', title=_('Sign In'), form=form)
 
+
 @app.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
     if current_user.is_authenticated:
@@ -90,6 +100,7 @@ def reset_password():
             flash(_('Check your email to reset your password'))
             return redirect(url_for('login'))
     return render_template('reset_password.html', title=_('Reset Password'), form=form)
+
 
 @app.route('/update-password/<token>', methods=['GET', 'POST'])
 def update_password(token):
@@ -106,6 +117,7 @@ def update_password(token):
         return redirect(url_for('login'))
     return render_template('update_password.html', title=_('Update password'), form=form)
 
+
 @app.route('/user/<username>')
 @login_required
 def user(username):
@@ -115,6 +127,7 @@ def user(username):
     next_url = url_for('user', username=username, page=posts.next_num) if posts.has_next else None
     prev_url = url_for('user', username=username, page=posts.prev_num) if posts.has_prev else None
     return render_template('user.html', user=user, posts=posts.items, next_url=next_url, prev_url=prev_url)
+
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
@@ -131,6 +144,7 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title=_('Edit profile'), form=form)
 
+
 @app.route('/follow/<username>')
 @login_required
 def follow(username):
@@ -145,6 +159,7 @@ def follow(username):
     db.session.commit()
     flash(_('You now are following %(username)', username=username))
     return redirect(url_for('user', username=username))
+
 
 @app.route('/unfollow/<username>')
 def unfollow(username):
@@ -169,3 +184,13 @@ def explore():
     next_url = url_for('explore', page=posts.next_num) if posts.has_next else None
     prev_url = url_for('explore', page=posts.prev_num) if posts.has_prev else None
     return render_template('index.html', title=_('Explore'), posts=posts.items, next_url=next_url, prev_url=prev_url)
+
+
+@app.route('/translate', methods=['POST'])
+@login_required
+def translate_text():
+    dest_language = g.locale
+    text = request.form['text']
+    src_language = request.form['src_language']
+    translation = translate(text, src_language, dest_language)
+    return jsonify({'tx': translation})

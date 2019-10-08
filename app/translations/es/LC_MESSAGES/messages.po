@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-10-06 19:45+0200\n"
+"POT-Creation-Date: 2019-10-08 20:44+0200\n"
 "PO-Revision-Date: 2019-10-06 19:13+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -34,7 +34,7 @@ msgstr "Contraseña"
 msgid "Remember me"
 msgstr "Recordar"
 
-#: app/forms.py:13 app/routes.py:56 app/templates/login.html:7
+#: app/forms.py:13 app/routes.py:67 app/templates/login.html:7
 msgid "Log In"
 msgstr "Inicio de sesión"
 
@@ -46,7 +46,7 @@ msgstr "Email"
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
-#: app/forms.py:20 app/routes.py:75 app/templates/signin.html:7
+#: app/forms.py:20 app/routes.py:88 app/templates/signin.html:7
 msgid "Sign In"
 msgstr "Registro"
 
@@ -82,73 +82,81 @@ msgstr "Dile algo al mundo"
 msgid "Publish"
 msgstr "Publicar"
 
-#: app/routes.py:29
+#: app/routes.py:39
 msgid "Your post has been published"
 msgstr "Tu entrada ha sido publicada"
 
-#: app/routes.py:35
+#: app/routes.py:45
 msgid "Home"
 msgstr "Inicio"
 
-#: app/routes.py:46
+#: app/routes.py:57
 msgid "Invalid username or password"
 msgstr "Nombre de usuario o contraseña incorrectos"
 
-#: app/routes.py:54
+#: app/routes.py:65
 msgid "User inactive"
 msgstr "Usuario inactivo"
 
-#: app/routes.py:73
+#: app/routes.py:86
 msgid "You are now registered!"
 msgstr "¡Ya estás registrado!"
 
-#: app/routes.py:86
+#: app/routes.py:100
 msgid "Check your email to reset your password"
 msgstr "Comprueba tu bandeja de entrada para restablecer tu contraseña"
 
-#: app/routes.py:88 app/templates/reset_password.html:7
+#: app/routes.py:102 app/templates/reset_password.html:7
 msgid "Reset Password"
 msgstr "Restaurar Contraseña"
 
-#: app/routes.py:101
+#: app/routes.py:116
 msgid "Your password has been updated"
 msgstr "Tu contraseña ha sido actualizada"
 
-#: app/routes.py:103
+#: app/routes.py:118
 msgid "Update password"
 msgstr "Actualizar contraseña"
 
-#: app/routes.py:123
+#: app/routes.py:140
 msgid "Your changes have been updated"
 msgstr "Tus cambios han sido actualizados"
 
-#: app/routes.py:128 app/templates/user.html:36
+#: app/routes.py:145 app/templates/user.html:38
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: app/routes.py:135 app/routes.py:149
+#: app/routes.py:153 app/routes.py:168
 msgid "User %(username) not found"
 msgstr "Usuario %(username) no encontrado"
 
-#: app/routes.py:138
+#: app/routes.py:156
 msgid "You cannot follow yourself"
 msgstr "No puedes seguirte a tí mismo"
 
-#: app/routes.py:142
+#: app/routes.py:160
 msgid "You now are following %(username)"
 msgstr "Ahora estás siguiendo a %(username)"
 
-#: app/routes.py:152
+#: app/routes.py:171
 msgid "You cannot unfollow yourself"
 msgstr "No puedes dejar de seguirte a tí mismo"
 
-#: app/routes.py:156
+#: app/routes.py:175
 msgid "You are not following %(username)"
 msgstr "Ya no estás siguiendo a %(username)"
 
-#: app/routes.py:167 app/templates/base.html:31
+#: app/routes.py:186 app/templates/base.html:31
 msgid "Explore"
 msgstr "Explorar"
+
+#: app/translate.py:11
+msgid "ERROR - Translation service is not configured"
+msgstr "ERROR - El servicio de traducción no está configurado"
+
+#: app/translate.py:17
+msgid "ERROR - Translation service failed"
+msgstr "ERROR - El servicio de traducción falló"
 
 #: app/templates/404.html:7
 msgid "Error 404 | Page not Found"
@@ -190,15 +198,11 @@ msgstr "Cerrar sesión"
 msgid "Edit Profile"
 msgstr "Editar perfil"
 
-#: app/templates/index.html:12
-msgid "Hi"
-msgstr "Hola"
-
-#: app/templates/index.html:44 app/templates/user.html:71
+#: app/templates/index.html:45 app/templates/user.html:73
 msgid "Newer posts"
 msgstr "Entradas recientes"
 
-#: app/templates/index.html:49 app/templates/user.html:76
+#: app/templates/index.html:50 app/templates/user.html:78
 msgid "Older posts"
 msgstr "Entradas antiguas"
 
@@ -214,6 +218,10 @@ msgstr "Registro"
 msgid "said"
 msgstr "dijo"
 
+#: app/templates/post.html:49
+msgid "Error: Could not contact server."
+msgstr "Error: No se puedo conectar con el servidor."
+
 #: app/templates/signin.html:53
 msgid "Already Signed? Log in"
 msgstr "¿Ya estás registrado? Inicia sesión"
@@ -222,15 +230,15 @@ msgstr "¿Ya estás registrado? Inicia sesión"
 msgid "Update Password"
 msgstr "Actualizar contraseña"
 
-#: app/templates/user.html:30
+#: app/templates/user.html:32
 msgid "Last connection"
 msgstr "Última conexión"
 
-#: app/templates/user.html:39
+#: app/templates/user.html:41
 msgid "Follow"
 msgstr "Seguir"
 
-#: app/templates/user.html:42
+#: app/templates/user.html:44
 msgid "Unfollow"
 msgstr "Dejar de seguir"
 

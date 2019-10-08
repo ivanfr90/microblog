@@ -7,9 +7,23 @@
             <div class="col my-auto">
                 <dvi>
                     <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
-                    <span>{{ _('said') }}: {{ post.body }}</span>
+                    <span>{{ _('said') }}:</span>
+                    <span id="post-{{ post.id }}">{{ post.body }}</span>
                 </dvi>
                 <div>
+                    {% if post.language and post.language != g.locale %}
+                    <span id="post-tx-{{ post.id }}">
+                        <a href="javascript:translate(
+                        '#post-{{ post.id }}',
+                        '#post-tx-{{ post.id }}',
+                        '{{ post.language }}');"
+                        class="btn btn-sm btn-primary py-0">{{ _('Translate from {}'.format(post.language)) }}</a>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-2 my-auto">
+                <div class="text-right">
                     <small id="user-entry-{{ index }}"></small>
                 </div>
             </div>
@@ -23,4 +37,16 @@
 		var userEntryHTML = document.getElementById('user-entry-' + '{{ index }}');
 		userEntryHTML.innerHTML = userEntryHTML.innerHTML + " " + postTimeAgo;
 	}, false);
+
+	function translate(sourceElem, destElem, sourceLang) {
+        $(destElem).html('<img src="{{ url_for('static', filename='loading.gif') }}">');
+        $.post('/translate', {
+            text: $(sourceElem).text(),
+            src_language: sourceLang,
+        }).done(function(response) {
+            $(destElem).text(response['tx'])
+        }).fail(function() {
+            $(destElem).text("{{ _('Error: Could not contact server.') }}");
+        });
+    }
 </script>

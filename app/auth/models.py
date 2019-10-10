@@ -3,15 +3,17 @@ from datetime import datetime
 from time import time
 
 import jwt
+from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import db, login, app
+from app.extensions import db, login
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
-)
+ )
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -42,13 +44,13 @@ class User(UserMixin, db.Model):
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
-            app.config['SECRET_KEY'], algorithm='HS256'
+            current_app.config['SECRET_KEY'], algorithm='HS256'
         ).decode('utf-8')
 
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            decoded_token = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
             id = decoded_token['reset_password']
         except:
             return
@@ -70,8 +72,9 @@ class User(UserMixin, db.Model):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
 
     def followed_posts(self):
-        followed_posts = Post.query\
-            .join(followers, (followers.c.followed_id == Post.user_id))\
+        from app.core.models import Post
+        followed_posts = Post.query \
+            .join(followers, (followers.c.followed_id == Post.user_id)) \
             .filter(followers.c.follower_id == self.id)
         return followed_posts.union(self.posts).order_by(Post.timestamp.desc())
 
@@ -83,15 +86,3 @@ def load_user(id):
     except ValueError:
         pass
     return None
-
-
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    language = db.Column(db.String(5))
-
-    def __repr__(self):
-        return f'<Post {self.body}>'
-

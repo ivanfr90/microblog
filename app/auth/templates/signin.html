@@ -4,15 +4,24 @@
 <div class="row">
     <div class="col-12 col-md-6 mx-auto">
         <div class="text-center py-3 pb-5">
-            <h1>{{ _('Log In') }}</h1>
+            <h1>{{ _('Sign In') }}</h1>
         </div>
 
-        <form action="" method="post" novalidate>
+        <form action="" method="POST" novalidate>
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.username.label }}
                 {{ form.username(class="form-control") }}
                 {% for error in form.username.errors %}
+                <div class="alert alert-danger p-0 mt-1" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+                {% for error in form.email.errors %}
                 <div class="alert alert-danger p-0 mt-1" role="alert">
                     {{ error }}
                 </div>
@@ -26,24 +35,23 @@
                     {{ error }}
                 </div>
                 {% endfor %}
-                </p>
-                <div class="text-right">
-                    <div class="custom-control custom-checkbox">
-                        {{ form.remember_me(class="custom-control-input") }}
-                        <label class="custom-control-label" for="remember_me">{{ form.remember_me.label }}</label>
-                    </div>
+            </div>
+            <div class="form-group">
+                {{ form.password2.label }}
+                {{ form.password2(class="form-control") }}
+                {% for error in form.password2.errors %}
+                <div class="alert alert-danger p-0 mt-1" role="alert">
+                    {{ error }}
                 </div>
-                <div class="text-center pt-4">
-                    {{ form.submit(class="btn btn-primary px-5") }}
-                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center pt-4">
+                {{ form.submit(class="btn btn-primary px-5") }}
             </div>
         </form>
-
         <div class="text-center">
-            <a href="{{ url_for('reset_password') }}">{{ _('I forgot my password') }}</a>
-            <a href="{{ url_for('signin') }}">{{ _('Sign Up') }}</a>
+            <a href="{{ url_for('auth.login') }}">{{ _('Already Signed? Log in') }}</a>
         </div>
     </div>
 </div>
-
 {% endblock %}

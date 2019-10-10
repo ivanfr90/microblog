@@ -2,9 +2,12 @@ from threading import Thread
 
 from flask import current_app
 from flask_mail import Message
+from werkzeug.utils import import_string
 
 from app.extensions import mail
 
+def get_user_model():
+    return import_string(current_app.config['USER_MODEL'])
 
 def send_async_email(app, msg):
     with app.app_context():

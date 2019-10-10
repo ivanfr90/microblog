@@ -5,9 +5,9 @@ from flask_babel import _, get_locale
 from flask_login import current_user, login_required
 from guess_language import guess_language, UNKNOWN
 
-from app.auth.models import User
 from app.extensions import db
 from app.translate import translate
+from app.utils import get_user_model
 from . import core
 from .forms import EditProfileForm, PostForm
 from .models import Post
@@ -49,7 +49,7 @@ def index():
 @core.route('/user/<username>')
 @login_required
 def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
+    user = get_user_model().query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
     posts = user.posts.order_by(Post.timestamp.desc()).paginate(page, current_app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('core.user', username=username, page=posts.next_num) if posts.has_next else None
@@ -76,7 +76,7 @@ def edit_profile():
 @core.route('/follow/<username>')
 @login_required
 def follow(username):
-    user = User.query.filter_by(username=username).first()
+    user = get_user_model().query.filter_by(username=username).first()
     if not user:
         flash(_('User %(username) not found', username=username))
         return redirect(url_for('core.index'))
@@ -91,7 +91,7 @@ def follow(username):
 
 @core.route('/unfollow/<username>')
 def unfollow(username):
-    user = User.query.filter_by(username=username).first()
+    user = get_user_model().query.filter_by(username=username).first()
     if not user:
         flash(_('User %(username) not found', username=username))
         return redirect(url_for('core.index'))

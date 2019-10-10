@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Length
 
-from app.auth.models import User
+from app.utils import get_user_model
 
 
 class EditProfileForm(FlaskForm):
@@ -17,7 +17,7 @@ class EditProfileForm(FlaskForm):
 
     def validate_username(self, username):
         if username.data != self.original_username:
-            user = User.query.filter_by(username=username.data).first()
+            user = get_user_model().query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError(_l('Username already exists'))
 

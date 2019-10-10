@@ -4,7 +4,7 @@ from werkzeug.routing import ValidationError
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
 
-from .models import User
+from app.utils import get_user_model as User
 
 
 class LoginForm(FlaskForm):

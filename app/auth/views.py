@@ -5,10 +5,10 @@ from werkzeug.urls import url_parse
 from werkzeug.utils import redirect
 
 from app.extensions import db
+from app.utils import get_user_model
 from . import auth
 from .email import send_password_reset_email
 from .forms import LoginForm, SignInForm, ResetPasswordForm, UpdatePasswordForm
-from .models import User
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -17,7 +17,7 @@ def login():
         return redirect(url_for('auth.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = get_user_model().query.filter_by(username=form.username.data).first()
         if not user or not user.check_password(form.password.data):
             flash(_('Invalid username or password'))
             return redirect(url_for('auth.login'))
@@ -44,7 +44,7 @@ def signin():
         return redirect(url_for('core.index'))
     form = SignInForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = get_user_model()(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -59,7 +59,7 @@ def reset_password():
         return url_for('core.index')
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = get_user_model().query.filter_by(email=form.email.data).first()
         if user:
             send_password_reset_email(user)
             flash(_('Check your email to reset your password'))
@@ -71,7 +71,7 @@ def reset_password():
 def update_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('core.index'))
-    user = User.verify_reset_password_token(token)
+    user = get_user_model().verify_reset_password_token(token)
     if not user:
         return redirect(url_for('core.index'))
     form = UpdatePasswordForm()

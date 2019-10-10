@@ -8,6 +8,7 @@ from app.auth import auth
 from app.core import core
 from app.errors import errors
 from app.extensions import babel, db, migrate, login, mail
+from app.user import bp as user
 from config import Config
 
 
@@ -68,6 +69,7 @@ def register_extensions(app):
 
 def register_blueprints(app):
     """Register blueprints with the Flask application."""
+    app.register_blueprint(user)
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(core)
     app.register_blueprint(errors)

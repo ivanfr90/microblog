@@ -35,12 +35,12 @@
 
                         <div class="py-2">
                             {% if user == current_user %}
-                            <a href="{{ url_for('core.edit_profile') }}" class="btn btn-sm btn-primary">{{ _('Edit profile') }}</a>
+                            <a href="{{ url_for('user.edit_profile') }}" class="btn btn-sm btn-primary">{{ _('Edit profile') }}</a>
                             {% elif not current_user.is_following(user) %}
-                            <a href="{{ url_for('core.follow', username=user.username) }}"
+                            <a href="{{ url_for('user.follow', username=user.username) }}"
                                class="btn btn-sm btn-success">{{ _('Follow') }}</a>
                             {% else %}
-                            <a href="{{ url_for('core.unfollow', username=user.username) }}"
+                            <a href="{{ url_for('user.unfollow', username=user.username) }}"
                                class="btn btn-sm btn-danger">{{ _('Unfollow') }}</a>
                             {% endif %}
                         </div>

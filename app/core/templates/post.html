@@ -6,7 +6,7 @@
             </div>
             <div class="col my-auto">
                 <dvi>
-                    <a href="{{ url_for('core.user', username=post.author.username) }}">{{ post.author.username }}</a>
+                    <a href="{{ url_for('user.user', username=post.author.username) }}">{{ post.author.username }}</a>
                     <span>{{ _('said') }}:</span>
                     <span id="post-{{ post.id }}">{{ post.body }}</span>
                 </dvi>

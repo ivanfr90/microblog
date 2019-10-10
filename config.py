@@ -31,4 +31,4 @@ class Config(object):
     YANDEX_ENDPOINT = os.environ.get('YANDEX_ENDPOINT') or 'https://translate.yandex.net/api/v1.5/tr.json/translate'
     YANDEX_API_KEY = os.environ.get('YANDEX_API_KEY')
 
-    USER_MODEL = 'app.auth.models.User'
+    USER_MODEL = 'app.user.models.User'

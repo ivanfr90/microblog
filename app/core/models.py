@@ -1,9 +1,12 @@
 from datetime import datetime
 
 from app.extensions import db
+from app.mixins import SearchableMixin
 
 
-class Post(db.Model):
+class Post(SearchableMixin, db.Model):
+    __searchable__ = ['body']
+
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)

@@ -8,7 +8,7 @@ from guess_language import guess_language, UNKNOWN
 from app.extensions import db
 from app.translate import translate
 from . import core
-from .forms import PostForm
+from .forms import PostForm, SearchPostsForm
 from .models import Post
 
 
@@ -21,6 +21,7 @@ def update_last_seen():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+        g.search_posts_form = SearchPostsForm()
 
 
 @core.route('/', methods=['GET', 'POST'])
@@ -63,3 +64,16 @@ def translate_text():
     src_language = request.form['src_language']
     translation = translate(text, src_language, dest_language)
     return jsonify({'tx': translation})
+
+@core.route('/search')
+@login_required
+def search_posts():
+    if not g.search_posts_form.validate():
+        return redirect(url_for('core.explore'))
+    page = request.args.get('page', 1, type=int)
+    posts, total = Post.search(g.search_posts_form.q.data, page, current_app.config['POSTS_PER_PAGE'])
+    next_url = url_for('core.search_posts', q=g.search_posts_form.q.data, page=page+1) \
+        if total > page * current_app.config['POSTS_PER_PAGE'] else None
+    prev_url = url_for('core.search_posts', q=g.search_posts_form.q.data, page=page-1) \
+        if page > 1 else None
+    return render_template('search.html', title=_('Search'), posts=posts, next_url=next_url, prev_url=prev_url)

@@ -17,6 +17,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     register_extensions(app)
+    register_custom(app)
     register_blueprints(app)
 
     if not app.debug and not app.testing:
@@ -44,7 +45,7 @@ def create_app(config_class=Config):
                 mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
                 fromaddr=f'no-reply@{app.config["MAIL_SERVER"]}',
                 toaddrs=app.config['ADMINS'],
-                subject=['Microblog Failure'],
+                subject=['how init standard appsMicroblog Failure'],
                 credentials=auth, secure=secure
             )
             mail_handler.setLevel(logging.ERROR)
@@ -74,3 +75,8 @@ def register_blueprints(app):
     app.register_blueprint(core)
     app.register_blueprint(errors)
 
+
+def register_custom(app):
+    from elasticsearch import Elasticsearch
+    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
+        if app.config['ELASTICSEARCH_URL'] else None

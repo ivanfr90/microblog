@@ -32,3 +32,7 @@ class Config(object):
     YANDEX_API_KEY = os.environ.get('YANDEX_API_KEY')
 
     USER_MODEL = 'app.user.models.User'
+
+    # ELASTICSEARCH
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+

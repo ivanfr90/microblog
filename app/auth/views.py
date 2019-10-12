@@ -6,12 +6,12 @@ from werkzeug.utils import redirect
 
 from app.extensions import db
 from app.utils import get_user_model
-from . import auth
+from . import bp
 from .email import send_password_reset_email
 from .forms import LoginForm, SignInForm, ResetPasswordForm, UpdatePasswordForm
 
 
-@auth.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('auth.index'))
@@ -32,13 +32,13 @@ def login():
     return render_template('login.html', title=_('Log In'), form=form)
 
 
-@auth.route('/logout')
+@bp.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('core.index'))
 
 
-@auth.route('/signin', methods=['GET', 'POST'])
+@bp.route('/signin', methods=['GET', 'POST'])
 def signin():
     if current_user.is_authenticated:
         return redirect(url_for('core.index'))
@@ -53,7 +53,7 @@ def signin():
     return render_template('signin.html', title=_('Sign In'), form=form)
 
 
-@auth.route('/reset-password', methods=['GET', 'POST'])
+@bp.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
     if current_user.is_authenticated:
         return url_for('core.index')
@@ -67,7 +67,7 @@ def reset_password():
     return render_template('reset_password.html', title=_('Reset Password'), form=form)
 
 
-@auth.route('/update-password/<token>', methods=['GET', 'POST'])
+@bp.route('/update-password/<token>', methods=['GET', 'POST'])
 def update_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('core.index'))

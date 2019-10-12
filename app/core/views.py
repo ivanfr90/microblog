@@ -7,12 +7,12 @@ from guess_language import guess_language, UNKNOWN
 
 from app.extensions import db
 from app.translate import translate
-from . import core
+from . import bp
 from .forms import PostForm, SearchPostsForm
 from .models import Post
 
 
-@core.before_request
+@bp.before_request
 def update_last_seen():
     # locale info
     g.locale = str(get_locale())
@@ -24,8 +24,8 @@ def update_last_seen():
         g.search_posts_form = SearchPostsForm()
 
 
-@core.route('/', methods=['GET', 'POST'])
-@core.route('/index', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     form = PostForm()
@@ -46,7 +46,7 @@ def index():
                            prev_url=prev_url)
 
 
-@core.route('/explore')
+@bp.route('/explore')
 @login_required
 def explore():
     page = request.args.get('page', 1, type=int)
@@ -56,7 +56,7 @@ def explore():
     return render_template('index.html', title=_('Explore'), posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 
-@core.route('/translate', methods=['POST'])
+@bp.route('/translate', methods=['POST'])
 @login_required
 def translate_text():
     dest_language = g.locale
@@ -65,7 +65,7 @@ def translate_text():
     translation = translate(text, src_language, dest_language)
     return jsonify({'tx': translation})
 
-@core.route('/search')
+@bp.route('/search')
 @login_required
 def search_posts():
     if not g.search_posts_form.validate():

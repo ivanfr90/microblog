@@ -4,9 +4,9 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from flask import Flask, request, current_app
 
-from app.auth import auth
-from app.core import core
-from app.errors import errors
+from app.auth import bp as auth
+from app.core import bp as core
+from app.errors import bp as errors
 from app.extensions import babel, db, migrate, login, mail
 from app.user import bp as user
 from config import Config

@@ -356,6 +356,7 @@ trippau/media/
 
 
 ###### Custom microblog ######
+/venv3.7
 app.db
 app/__pycache__/
 .idea/

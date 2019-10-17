@@ -1,0 +1,30 @@
+<div class="row h-100">
+    <div class="col-4 my-auto">
+        <img src='{{ user.avatar(64) }}'>
+    </div>
+    <div class="col-8 my-auto">
+        <a href='{{ url_for('user.user', username=user.username) }}'>
+            {{ user.username }}
+        </a>
+        <small>
+            {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+            {% if user.last_seen %}
+            {% endif %}
+            <div>
+                <span>{{ _('%(count)d followers', count=user.followers.count()) }},
+               {{ _('%(count)d following', count=user.followed.count()) }}</span>
+            </div>
+            {% if user != current_user %}
+                {% if not current_user.is_following(user) %}
+                <a href='{{ url_for('user.follow', username=user.username) }}'>
+                    {{ _('Follow') }}
+                </a>
+                {% else %}
+                <a href='{{ url_for('user.unfollow', username=user.username) }}'>
+                    {{ _('Unfollow') }}
+                </a>
+                {% endif %}
+            {% endif %}
+        </small>
+    </div>
+</table>

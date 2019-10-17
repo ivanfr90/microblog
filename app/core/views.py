@@ -65,12 +65,13 @@ def translate_text():
     translation = translate(text, src_language, dest_language)
     return jsonify({'tx': translation})
 
+
 @bp.route('/search')
 @login_required
 def search_posts():
-    if not g.search_posts_form.validate():
-        return redirect(url_for('core.explore'))
     page = request.args.get('page', 1, type=int)
+    if not g.search_posts_form.validate() or page<1:
+        return redirect(url_for('core.explore'))
     posts, total = Post.search(g.search_posts_form.q.data, page, current_app.config['POSTS_PER_PAGE'])
     next_url = url_for('core.search_posts', q=g.search_posts_form.q.data, page=page+1) \
         if total > page * current_app.config['POSTS_PER_PAGE'] else None

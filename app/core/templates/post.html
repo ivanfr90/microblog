@@ -5,11 +5,11 @@
                 <img src="{{ post.author.avatar(36) }}" class="img-fluid" alt="Avatar image">
             </div>
             <div class="col my-auto">
-                <dvi>
+                <span class="user-popup">
                     <a href="{{ url_for('user.user', username=post.author.username) }}">{{ post.author.username }}</a>
-                    <span>{{ _('said') }}:</span>
-                    <span id="post-{{ post.id }}">{{ post.body }}</span>
-                </dvi>
+                </span>
+                <span>{{ _('said') }}:</span>
+                <span id="post-{{ post.id }}">{{ post.body }}</span>
                 <div>
                     {% if post.language and post.language != g.locale %}
                     <span id="post-tx-{{ post.id }}">
@@ -39,7 +39,7 @@
 	}, false);
 
 	function translate(sourceElem, destElem, sourceLang) {
-        $(destElem).html('<img src="{{ url_for("core.static", filename="loading.gif") }}">');
+        $(destElem).html('<img src="{{ url_for("core.static", filename="img/loading.gif") }}">');
         $.post('/translate', {
             text: $(sourceElem).text(),
             src_language: sourceLang,

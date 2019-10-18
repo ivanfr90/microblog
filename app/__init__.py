@@ -4,6 +4,7 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from flask import Flask, request, current_app
 
+from app.messages import bp as messages
 from app.auth import bp as auth
 from app.core import bp as core
 from app.errors import bp as errors
@@ -71,6 +72,7 @@ def register_extensions(app):
 def register_blueprints(app):
     """Register blueprints with the Flask application."""
     app.register_blueprint(user)
+    app.register_blueprint(messages)
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(core)
     app.register_blueprint(errors)

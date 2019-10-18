@@ -1,3 +1,4 @@
+import json
 from _md5 import md5
 from datetime import datetime
 from time import time
@@ -7,7 +8,9 @@ from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from app.core.models import Notification
 from app.extensions import db, login
+from app.messages.models import Message
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -31,6 +34,10 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'),
         lazy='dynamic'
     )
+    messages_sent = db.relationship('Message', foreign_keys='Message.sender_id', backref='author', lazy='dynamic')
+    messages_received = db.relationship('Message', foreign_keys='Message.recipient_id', backref='recipient', lazy='dynamic')
+    last_message_read_time = db.Column(db.DateTime)
+    notifications = db.relationship('Notification', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -46,6 +53,16 @@ class User(UserMixin, db.Model):
             {'reset_password': self.id, 'exp': time() + expires_in},
             current_app.config['SECRET_KEY'], algorithm='HS256'
         ).decode('utf-8')
+
+    def new_messages(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        return Message.query.filter_by(recipient=self).filter(Message.timestamp > last_read_time).count()
+
+    def add_notification(self, name, data):
+        self.notifications.filter_by(name=name).delete()
+        notification = Notification(name=name, payload_json=json.dumps(data), user=self)
+        db.session.add(notification)
+        return notification
 
     @staticmethod
     def verify_reset_password_token(token):

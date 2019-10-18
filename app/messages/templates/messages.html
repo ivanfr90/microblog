@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block custom_scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/es.js" integrity="sha256-bETP3ndSBCorObibq37vsT+l/vwScuAc9LRJIQyb068=" crossorigin="anonymous"></script>
+<script src="{{ url_for('user.static', filename='js/user.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+    <h1>{{ _('Messages') }}</h1>
+    {% for message in messages %}
+        {% with index=loop.index %}
+            {% include 'message.html' %}
+        {% endwith %}
+    {% else %}
+         <div class="row h-100 py-5">
+            <div class="col-12 text-center">
+                <p>{{ _("You don't have messages") }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if prev_url or next_url %}
+        <nav aria-label="Pagination">
+            <ul class="pagination justify-content-end">
+                {% if prev_url %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ prev_url }}">{{ _('Newer messages') }}</a>
+                </li>
+                {% endif %}
+                {% if next_url %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ next_url }}">{{ _('Older messages') }}</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

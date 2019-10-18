@@ -34,6 +34,12 @@
                         {% endif %}
 
                         <div class="py-2">
+                            {% if user != current_user %}
+                                <a href="{{ url_for('messages.send_message', recipient=user.username) }}" class="btn btn-sm btn-primary">
+                                    {{ _('Send private message') }}
+                                </a>
+                            {% endif %}
+
                             {% if user == current_user %}
                             <a href="{{ url_for('user.edit_profile') }}" class="btn btn-sm btn-primary">{{ _('Edit profile') }}</a>
                             {% elif not current_user.is_following(user) %}

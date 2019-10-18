@@ -1,0 +1,32 @@
+<div class="card my-1">
+    <div class="card-body py-2">
+        <div class="row h-100">
+            <div class="col-auto my-auto">
+                <img src="{{ message.author.avatar(36) }}" class="img-fluid" alt="Avatar image">
+            </div>
+            <div class="col my-auto">
+                <span>{{ _('Received message from') }}</span>
+                <span class="user-popup">
+                    <a href="{{ url_for('user.user', username=message.author.username) }}">{{ message.author.username }}</a>
+                </span>
+                <div>
+                    <em id="message-{{ message.id }}">{{ message.body }}</em>
+                </div>
+            </div>
+            <div class="col-2 my-auto">
+                <div class="text-right">
+                    <small id="user-entry-{{ index }}"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+	window.addEventListener("load", function (event) {
+		moment().locale('{{ g.locale }}');
+		var postTimeAgo = moment('{{message.timestamp}}', 'YYYY-MM-DD HH:mm:ss.SSSSSS').fromNow();
+		var userEntryHTML = document.getElementById('user-entry-' + '{{ index }}');
+		userEntryHTML.innerHTML = userEntryHTML.innerHTML + " " + postTimeAgo;
+	}, false);
+</script>

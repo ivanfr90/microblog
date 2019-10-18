@@ -27,6 +27,9 @@ class Config(object):
     # PAGINATION
     POSTS_PER_PAGE = 5
 
+    # PAGINATION
+    MESSAGES_PER_PAGE = 5
+
     # LANGUAGE API KEY
     YANDEX_ENDPOINT = os.environ.get('YANDEX_ENDPOINT') or 'https://translate.yandex.net/api/v1.5/tr.json/translate'
     YANDEX_API_KEY = os.environ.get('YANDEX_API_KEY')

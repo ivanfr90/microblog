@@ -9,7 +9,7 @@ from app.extensions import db
 from app.translate import translate
 from . import bp
 from .forms import PostForm, SearchPostsForm
-from .models import Post
+from .models import Post, Notification
 
 
 @bp.before_request
@@ -78,3 +78,17 @@ def search_posts():
     prev_url = url_for('core.search_posts', q=g.search_posts_form.q.data, page=page-1) \
         if page > 1 else None
     return render_template('search.html', title=_('Search'), posts=posts, next_url=next_url, prev_url=prev_url)
+
+
+@bp.route('/notifications')
+@login_required
+def notifications():
+    since = request.args.get('since', 0.0, type=float)
+    notifications = current_user.notifications.filter(
+        Notification.timestamp > since
+    ).order_by(Notification.timestamp.asc())
+    return jsonify([{
+        'name': n.name,
+        'data': n.get_data(),
+        'timestamp': n.timestamp
+    } for n in notifications])

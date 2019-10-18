@@ -34,6 +34,17 @@
                         <a class="nav-link" href="{{ url_for('user.user', username=current_user.username) }}">{{ _('Profile') }}</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('messages.messages') }}">
+                            {{ _('Messages') }}
+                            {% set new_messages = current_user.new_messages() %}
+                            <span id="message-count"
+                                  class="badge badge-info"
+                                  style="display: {% if new_messages %} inline-block {% else %} none {% endif %};">
+                                {{ new_messages }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a>
                     </li>
                     {% endif %}
@@ -68,6 +79,27 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        {% if current_user.is_authenticated %}
+        {% set url_notifications = url_for('core.notifications') %}
+        <script src="{{ url_for('messages.static', filename='js/messages.js') }}"></script>
+        <script>
+            $(function() {
+                var since = 0;
+                var url = "{{ url_notifications }}";
+                setInterval(function() {
+                    $.ajax(url + "?since=" + since).done(
+                        function(notifications) {
+                            for (var i = 0; i < notifications.length; i++) {
+                                if (notifications[i].name == 'unread_message_count')
+                                    setMessageCount(notifications[i].data);
+                                since = notifications[i].timestamp;
+                            }
+                        }
+                    );
+                }, 5000);
+            });
+        </script>
+        {% endif %}
         {% block custom_scripts %}{% endblock %}
     </body>
 </html>

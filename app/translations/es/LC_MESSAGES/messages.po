@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-10-11 00:46+0200\n"
+"POT-Creation-Date: 2019-10-21 22:25+0200\n"
 "PO-Revision-Date: 2019-10-06 19:13+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -106,25 +106,53 @@ msgstr "Tu contraseña ha sido actualizada"
 msgid "Update password"
 msgstr "Actualizar contraseña"
 
-#: app/core/forms.py:7
+#: app/core/forms.py:8
 msgid "Tell something to world"
 msgstr "Dile algo al mundo"
 
-#: app/core/forms.py:8
+#: app/core/forms.py:9
 msgid "Publish"
 msgstr "Publicar"
 
-#: app/core/views.py:38
+#: app/core/forms.py:13 app/core/views.py:80
+msgid "Search"
+msgstr ""
+
+#: app/core/views.py:39
 msgid "Your post has been published"
 msgstr "Tu entrada ha sido publicada"
 
-#: app/core/views.py:44
+#: app/core/views.py:45
 msgid "Home"
 msgstr "Inicio"
 
-#: app/core/views.py:55 app/templates/base.html:31
+#: app/core/views.py:56 app/templates/base.html:31
 msgid "Explore"
 msgstr "Explorar"
+
+#: app/core/views.py:101
+msgid "An export task is currently in progress"
+msgstr ""
+
+#: app/core/views.py:103
+msgid "Exporting posts..."
+msgstr ""
+
+#: app/messages/forms.py:8
+msgid "Message"
+msgstr ""
+
+#: app/messages/forms.py:9
+msgid "Submit"
+msgstr ""
+
+#: app/messages/views.py:24
+msgid "Your message has been sent"
+msgstr ""
+
+#: app/messages/views.py:26
+msgid "Send Message"
+msgstr ""
 
 #: app/templates/base.html:11 app/templates/base.html:18
 msgid "Microblog"
@@ -142,7 +170,11 @@ msgstr "Iniciar sesión"
 msgid "Profile"
 msgstr "Perfil"
 
-#: app/templates/base.html:37
+#: app/templates/base.html:38
+msgid "Messages"
+msgstr ""
+
+#: app/templates/base.html:48
 msgid "Logout"
 msgstr "Cerrar sesión"
 
@@ -150,33 +182,36 @@ msgstr "Cerrar sesión"
 msgid "About me"
 msgstr "Sobre mí"
 
-#: app/user/views.py:30
+#: app/user/views.py:37
 msgid "Your changes have been updated"
 msgstr "Tus cambios han sido actualizados"
 
-#: app/user/views.py:35
+#: app/user/views.py:42
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: app/user/views.py:42 app/user/views.py:57
-msgid "User %(username) not found"
-msgstr "Usuario %(username) no encontrado"
+#: app/user/views.py:49 app/user/views.py:64
+#, python-format
+msgid "User %(username)s not found"
+msgstr ""
 
-#: app/user/views.py:45
+#: app/user/views.py:52
 msgid "You cannot follow yourself"
 msgstr "No puedes seguirte a tí mismo"
 
-#: app/user/views.py:49
-msgid "You now are following %(username)"
-msgstr "Ahora estás siguiendo a %(username)"
+#: app/user/views.py:56
+#, python-format
+msgid "You now are following %(username)s"
+msgstr ""
 
-#: app/user/views.py:60
+#: app/user/views.py:67
 msgid "You cannot unfollow yourself"
 msgstr "No puedes dejar de seguirte a tí mismo"
 
-#: app/user/views.py:64
-msgid "You are not following %(username)"
-msgstr "Ya no estás siguiendo a %(username)"
+#: app/user/views.py:71
+#, python-format
+msgid "You are not following %(username)s"
+msgstr ""
 
 #~ msgid "Error 404 | Page not Found"
 #~ msgstr "Error 404 | Página no encontrada"
@@ -225,4 +260,13 @@ msgstr "Ya no estás siguiendo a %(username)"
 
 #~ msgid "Unfollow"
 #~ msgstr "Dejar de seguir"
+
+#~ msgid "User %(username) not found"
+#~ msgstr "Usuario %(username) no encontrado"
+
+#~ msgid "You now are following %(username)"
+#~ msgstr "Ahora estás siguiendo a %(username)"
+
+#~ msgid "You are not following %(username)"
+#~ msgstr "Ya no estás siguiendo a %(username)"
 

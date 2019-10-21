@@ -2,13 +2,15 @@ import logging
 import os
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
+import rq
 from flask import Flask, request, current_app
 
-from app.messages import bp as messages
 from app.auth import bp as auth
 from app.core import bp as core
 from app.errors import bp as errors
 from app.extensions import babel, db, migrate, login, mail
+from app.messages import bp as messages
+from app.tasks import bp as tasks
 from app.user import bp as user
 from config import Config
 
@@ -74,11 +76,18 @@ def register_blueprints(app):
     app.register_blueprint(user)
     app.register_blueprint(messages)
     app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(tasks)
     app.register_blueprint(core)
     app.register_blueprint(errors)
 
 
 def register_custom(app):
+    # elastic search
     from elasticsearch import Elasticsearch
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
         if app.config['ELASTICSEARCH_URL'] else None
+
+    # redis
+    from redis import Redis
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('microblog-tasks', connection=app.redis)

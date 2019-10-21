@@ -49,6 +49,12 @@
                             <a href="{{ url_for('user.unfollow', username=user.username) }}"
                                class="btn btn-sm btn-danger">{{ _('Unfollow') }}</a>
                             {% endif %}
+
+                            {% if user == current_user and not current_user.get_task_in_progress('export_posts')  %}
+                            <a href="{{ url_for('core.export_posts') }}" class="btn btn-sm btn-secondary">{{ _('Export posts') }}</a>
+                            {% else %}
+                            <a href="{{ url_for('core.export_posts') }}" class="btn btn-sm btn-secondary disabled">{{ _('Export posts') }}</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div><!---->

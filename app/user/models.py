@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.core.models import Notification
 from app.extensions import db, login
 from app.messages.models import Message
+from app.tasks.models import Task
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -38,6 +39,7 @@ class User(UserMixin, db.Model):
     messages_received = db.relationship('Message', foreign_keys='Message.recipient_id', backref='recipient', lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
     notifications = db.relationship('Notification', backref='user', lazy='dynamic')
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -94,6 +96,18 @@ class User(UserMixin, db.Model):
             .join(followers, (followers.c.followed_id == Post.user_id)) \
             .filter(followers.c.follower_id == self.id)
         return followed_posts.union(self.posts).order_by(Post.timestamp.desc())
+
+    def launch_task(self, fn_name, description, *args, **kwargs):
+        rq_job = current_app.task_queue.enqueue(f'app.tasks.tasks.{fn_name}', self.id, *args, **kwargs)
+        task = Task(id=rq_job.get_id(), name=fn_name, description=description, user_id=self.id)
+        db.session.add(task)
+        return task
+
+    def get_tasks_in_progress(self):
+        return Task.query.filter_by(user=self, complete=False).all()
+
+    def get_task_in_progress(self, name):
+        return Task.query.filter_by(name=name, user=self, complete=False).first()
 
 
 @login.user_loader
